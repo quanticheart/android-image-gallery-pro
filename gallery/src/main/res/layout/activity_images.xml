@@ -42,22 +42,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.quanticheart.gallery.custonUI.folder.FolderRecyclerView
-        android:id="@+id/folderRecycler"
+    <com.quanticheart.gallery.customView.GridRecyclerView
+        android:id="@+id/imageRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:clipToPadding="false"
         android:columnWidth="@dimen/folder_column_width"
-        tools:listitem="@layout/picture_folder_item" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/empty"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        tools:listitem="@layout/item_picture" />
 
 </ViewFlipper>

@@ -31,27 +31,21 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/23 at 1:45:59 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:55:51 for quantic heart studios
  *
  */
-package com.quanticheart.gallery.custonUI.folder
+package com.quanticheart.gallery.view.folder.model
 
-import android.content.Context
-import android.util.AttributeSet
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.quanticheart.gallery.custonUI.folder.adapter.PictureFolderAdapter
+import java.io.Serializable
 
-class FolderRecyclerView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : RecyclerView(context, attrs, defStyleAttr) {
-
-    init {
-        layoutManager = GridLayoutManager(context, 3)
-        hasFixedSize()
-    }
-
-    fun setAdapter(): PictureFolderAdapter {
-        return PictureFolderAdapter(this)
+data class ImageFolderData(
+    var name: String = "",
+    var path: String = "",
+    var folderName: String = "",
+    var firstPic: String = ""
+) : Serializable{
+    var numberOfPics: Int = 0
+    fun addpics() {
+        numberOfPics++
     }
 }

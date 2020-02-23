@@ -35,14 +35,14 @@
  *
  */
 
-package com.quanticheart.gallery.custonUI.folder.extentions
+package com.quanticheart.gallery.view.folder.extentions
 
 import android.content.Context
 import android.provider.MediaStore
-import com.quanticheart.gallery.custonUI.folder.model.ImageFolderData
+import com.quanticheart.gallery.view.folder.model.ImageFolderData
 import com.quanticheart.gallery.extentions.getStringOrEmpty
 
-fun Context.getAllImageFolders(): ArrayList<ImageFolderData> {
+fun Context.getAllImagesFolders(): ArrayList<ImageFolderData> {
 
     val picFolderData: ArrayList<ImageFolderData> = ArrayList()
     val picPaths = ArrayList<String>()

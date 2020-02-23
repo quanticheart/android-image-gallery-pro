@@ -34,10 +34,11 @@
  *  * Copyright(c) Developed by John Alves at 2020/2/23 at 0:55:2 for quantic heart studios
  *
  */
-package com.quanticheart.gallery.custonUI.folder.adapter
+package com.quanticheart.gallery.view.folder.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,9 +46,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.quanticheart.gallery.R
-import com.quanticheart.gallery.custonUI.folder.adapter.PictureFolderAdapter.FolderHolder
-import com.quanticheart.gallery.custonUI.folder.model.ImageFolderData
-import kotlinx.android.synthetic.main.picture_folder_item.view.*
+import com.quanticheart.gallery.view.folder.adapter.PictureFolderAdapter.FolderHolder
+import com.quanticheart.gallery.view.folder.constants.FolderConstants
+import com.quanticheart.gallery.view.folder.model.ImageFolderData
+import com.quanticheart.gallery.ImageActivity
+import kotlinx.android.synthetic.main.item_picture_folder.view.*
 
 class PictureFolderAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<FolderHolder>() {
 
@@ -63,7 +66,7 @@ class PictureFolderAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<Fo
         FolderHolder(
             parent.context,
             LayoutInflater.from(parent.context).inflate(
-                R.layout.picture_folder_item,
+                R.layout.item_picture_folder,
                 parent,
                 false
             )
@@ -88,11 +91,9 @@ class PictureFolderAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<Fo
 
             itemView.folderName.text = "(${folder.numberOfPics}) ${folder.folderName}"
             itemView.folderPic.setOnClickListener {
-//                val move = Intent(this@GalleryActivity, ImageDisplay::class.java)
-//                move.putExtra("folderPath", pictureFolderPath)
-//                move.putExtra("folderName", folderName)
-//                //move.putExtra("recyclerItemSize",getCardsOptimalWidth(4));
-//                context.startActivity(move)
+                val move = Intent(context, ImageActivity::class.java)
+                move.putExtra(FolderConstants.FolderDataKey, folder)
+                context.startActivity(move)
             }
         }
     }
