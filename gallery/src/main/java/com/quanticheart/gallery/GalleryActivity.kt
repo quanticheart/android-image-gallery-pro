@@ -39,7 +39,6 @@ package com.quanticheart.gallery
 
 import android.Manifest
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.quanticheart.gallery.custonUI.folder.extentions.getAllImageFolders
 import kotlinx.android.synthetic.main.gallery_main.*
@@ -59,6 +58,7 @@ class GalleryActivity : AppCompatActivity() {
         val folds = getAllImageFolders()
         if (folds.isNotEmpty()) {
             folderRecycler.setAdapter().addData(folds)
+            flipper.displayedChild = 0
         }
     }
 
@@ -69,7 +69,7 @@ class GalleryActivity : AppCompatActivity() {
 
     @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onCameraDenied() {
-        empty.visibility = View.VISIBLE
+        flipper.displayedChild = 1
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
