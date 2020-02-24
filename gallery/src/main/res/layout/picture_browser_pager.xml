@@ -31,23 +31,21 @@
   ~  *        |/_/         \===/
   ~  *                       =
   ~  *
-  ~  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:47:18 for quantic heart studios
+  ~  * Copyright(c) Developed by John Alves at 2020/2/23 at 8:43:44 for quantic heart studios
   ~  */
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.quanticheart.gallery.customView.GridRecyclerView
-        android:id="@+id/imageRecycler"
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:clipToPadding="false"
-        android:columnWidth="@dimen/folder_column_width"
-        tools:listitem="@layout/item_picture" />
+        app:srcCompat="@drawable/cat"
+        tools:ignore="ContentDescription" />
 
-</FrameLayout>
+</RelativeLayout>

@@ -31,15 +31,16 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/23 at 0:38:40 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 9:24:0 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+package com.quanticheart.gallery.view.images.view.list
 
 import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.quanticheart.gallery.R
 import com.quanticheart.gallery.customView.extentions.setImagesAdapter
 import com.quanticheart.gallery.extentions.getSerializableExtra
 import com.quanticheart.gallery.view.folder.constants.FolderConstants
@@ -49,7 +50,7 @@ import kotlinx.android.synthetic.main.activity_images.*
 import permissions.dispatcher.*
 
 @RuntimePermissions
-class ImageActivity : AppCompatActivity() {
+class ImageListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

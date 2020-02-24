@@ -36,10 +36,12 @@
  */
 package com.quanticheart.gallery.view.images.model
 
+import java.io.Serializable
+
 data class ImageData(
     var name: String? = null,
     var path: String? = null,
     var size: String? = null,
     var imageUri: String? = null,
     var selected: Boolean = false
-)
+) : Serializable

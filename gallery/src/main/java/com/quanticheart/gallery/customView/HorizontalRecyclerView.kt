@@ -31,20 +31,27 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/23 at 1:17:11 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 9:5:30 for quantic heart studios
  *
  */
+package com.quanticheart.gallery.customView
 
-package com.quanticheart.gallery.customView.extentions
+import android.content.Context
+import android.util.AttributeSet
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
-import com.quanticheart.gallery.customView.GridRecyclerView
-import com.quanticheart.gallery.view.folder.adapter.PictureFolderAdapter
-import com.quanticheart.gallery.view.images.view.list.adapter.PictureAdapter
+class HorizontalRecyclerView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : RecyclerView(context, attrs, defStyleAttr) {
 
-fun GridRecyclerView.setFolderAdapter(): PictureFolderAdapter {
-    return PictureFolderAdapter(this)
-}
-
-fun GridRecyclerView.setImagesAdapter(): PictureAdapter {
-    return PictureAdapter(this)
+    init {
+        layoutManager = GridLayoutManager(
+            context,
+            1,
+            HORIZONTAL,
+            false
+        )
+        hasFixedSize()
+    }
 }

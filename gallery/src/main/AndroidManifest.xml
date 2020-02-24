@@ -40,6 +40,7 @@
 
     <application>
         <activity android:name=".GalleryActivity" />
-        <activity android:name=".ImageActivity" />
+        <activity android:name="com.quanticheart.gallery.view.images.view.list.ImageListActivity" />
+        <activity android:name=".view.images.view.indicator.ImageIndicatorActivity" />
     </application>
 </manifest>
