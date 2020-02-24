@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~  *                                     /@
   ~  *                      __        __   /\/
@@ -31,17 +31,23 @@
   ~  *        |/_/         \===/
   ~  *                       =
   ~  *
-  ~  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:39:14 for quantic heart studios
+  ~  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:47:18 for quantic heart studios
   ~  */
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.quanticheart.gallery" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <application>
-        <activity android:name=".GalleryActivity" />
-        <activity android:name="com.quanticheart.gallery.view.list.ImageListActivity" />
-        <activity android:name="com.quanticheart.gallery.view.indicator.ImageIndicatorActivity" />
-        <activity android:name=".view.allList.GalletyAllActivity" />
-    </application>
-</manifest>
+    <com.quanticheart.gallery.customView.GridRecyclerView
+        android:id="@+id/imageRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:columnWidth="@dimen/folder_column_width"
+        tools:listitem="@layout/item_image_simple" />
+
+</FrameLayout>

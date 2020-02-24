@@ -31,58 +31,41 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 0:58:54 for quantic heart studios
  *
  */
+package com.quanticheart.gallery.view.list.adapter
 
-package com.quanticheart.gallery
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.quanticheart.gallery.R
+import com.quanticheart.gallery.base.BaseRecyclerViewAdapter
+import com.quanticheart.gallery.base.BaseRecyclerViewHolder
+import com.quanticheart.gallery.imageExtentions.model.ImageData
+import com.quanticheart.gallery.view.list.adapter.PictureAdapter.ImageViewHolder
+import kotlinx.android.synthetic.main.item_image_simple.view.*
 
-import android.Manifest
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
-import permissions.dispatcher.*
+class PictureAdapter(recyclerView: RecyclerView) :
+    BaseRecyclerViewAdapter<ImageData, ImageViewHolder>(recyclerView) {
 
-@RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
+        ImageViewHolder(parent.getView(R.layout.item_image_simple))
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
-    }
+    inner class ImageViewHolder(itemView: View) :
+        BaseRecyclerViewHolder<ImageData>(itemView) {
+        override fun bind(item: ImageData, position: Int) {
+            Glide.with(itemView.context)
+                .load(item.path)
+                .apply(RequestOptions().centerCrop())
+                .into(itemView.image)
+            ViewCompat.setTransitionName(itemView.image, adapterPosition.toString() + "_image")
+            itemView.image.setOnClickListener {
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
+            }
         }
-    }
-
-    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showRationaleForCamera() {
-        openGallery()
-    }
-
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraDenied() {
-        flipper.displayedChild = 1
-    }
-
-    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraNeverAskAgain() {
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
     }
 }

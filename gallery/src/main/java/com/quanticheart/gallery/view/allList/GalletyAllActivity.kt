@@ -31,46 +31,43 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/24 at 0:18:8 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+package com.quanticheart.gallery.view.allList
 
 import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
+import com.quanticheart.gallery.R
+import com.quanticheart.gallery.extentions.setAllImagesAdapter
+import com.quanticheart.gallery.imageExtentions.getAllImages
+import kotlinx.android.synthetic.main.activity_all_images.*
 import permissions.dispatcher.*
 
 @RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
-
+class GalletyAllActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
+        setContentView(R.layout.activity_all_images)
+        showImagesWithPermissionCheck()
     }
 
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
-        }
+    fun showImages() {
+        val listImages = getAllImages()
+        list.setAllImagesAdapter().addData(listImages)
     }
 
     @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun showRationaleForCamera() {
-        openGallery()
+        finish()
     }
 
     @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onCameraDenied() {
-        flipper.displayedChild = 1
+        finish()
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)

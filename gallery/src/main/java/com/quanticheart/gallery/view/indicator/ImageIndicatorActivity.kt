@@ -31,46 +31,63 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 1:33:27 for quantic heart studios
  *
  */
-
-package com.quanticheart.gallery
+package com.quanticheart.gallery.view.indicator
 
 import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
+import com.quanticheart.gallery.R
+import com.quanticheart.gallery.extentions.getSerializableExtra
+import com.quanticheart.gallery.view.home.constants.FolderConstants
+import com.quanticheart.gallery.imageExtentions.model.FolderData
+import com.quanticheart.gallery.imageExtentions.getAllImagesByFolder
+import com.quanticheart.gallery.view.indicator.adapter.RecyclerPagerAdapter
+import com.quanticheart.gallery.view.indicator.adapter.ViewPagerAdapter
+import kotlinx.android.synthetic.main.activity_images_indicator.*
 import permissions.dispatcher.*
 
 @RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
+class ImageIndicatorActivity : AppCompatActivity() {
+
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private lateinit var recyclerAdapter: RecyclerPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
+        setContentView(R.layout.activity_images_indicator)
+        showImagesWithPermissionCheck()
     }
 
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
-        }
+    fun showImages() {
+        getSerializableExtra<FolderData>(FolderConstants.FolderDataKey)?.let { data ->
+            val list = getAllImagesByFolder(data.path)
+            list.first().selected = true
+
+            viewPagerAdapter = ViewPagerAdapter(imagePager) { position ->
+                recyclerAdapter.toPosition(position)
+            }
+            viewPagerAdapter.addData(list)
+
+            recyclerAdapter = RecyclerPagerAdapter(indicatorRecycler) { positionSelected ->
+                viewPagerAdapter.toPosition(positionSelected)
+            }
+            recyclerAdapter.addData(list)
+
+        } ?: finish()
     }
 
     @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun showRationaleForCamera() {
-        openGallery()
+        finish()
     }
 
     @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onCameraDenied() {
-        flipper.displayedChild = 1
+        finish()
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)

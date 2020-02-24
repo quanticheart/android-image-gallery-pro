@@ -31,58 +31,44 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 11:0:9 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+package com.quanticheart.gallery.base
 
-import android.Manifest
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
-import permissions.dispatcher.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
-@RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
+abstract class BaseRecyclerViewAdapter<T, VH : BaseRecyclerViewHolder<T>>(recyclerView: RecyclerView) :
+    RecyclerView.Adapter<VH>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
-    }
-
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
+    init {
+        recyclerView.apply {
+            adapter = this@BaseRecyclerViewAdapter
         }
     }
 
-    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showRationaleForCamera() {
-        openGallery()
+    protected val database = ArrayList<T>()
+
+    abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH
+
+    override fun getItemCount(): Int = database.size
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.bind(database[position], position)
     }
 
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraDenied() {
-        flipper.displayedChild = 1
+    fun addData(list: ArrayList<T>) {
+        if (list.isNotEmpty()) {
+            database.clear()
+            database.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 
-    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraNeverAskAgain() {
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
-    }
+    protected fun ViewGroup.getView(layoutRes: Int): View =
+        LayoutInflater.from(this.context).inflate(layoutRes, this, false)
 }

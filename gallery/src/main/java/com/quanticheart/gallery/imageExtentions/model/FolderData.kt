@@ -31,58 +31,21 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:55:51 for quantic heart studios
  *
  */
+package com.quanticheart.gallery.imageExtentions.model
 
-package com.quanticheart.gallery
+import java.io.Serializable
 
-import android.Manifest
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
-import permissions.dispatcher.*
-
-@RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
-    }
-
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
-        }
-    }
-
-    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showRationaleForCamera() {
-        openGallery()
-    }
-
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraDenied() {
-        flipper.displayedChild = 1
-    }
-
-    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraNeverAskAgain() {
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
+data class FolderData(
+    var name: String = "",
+    var path: String = "",
+    var folderName: String = "",
+    var firstPic: String = ""
+) : Serializable{
+    var numberOfPics: Int = 0
+    fun addNumberPictures() {
+        numberOfPics++
     }
 }

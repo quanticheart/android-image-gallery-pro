@@ -31,46 +31,49 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 9:24:0 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+package com.quanticheart.gallery.view.list
 
 import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
+import com.quanticheart.gallery.R
+import com.quanticheart.gallery.extentions.setImagesAdapter
+import com.quanticheart.gallery.extentions.getSerializableExtra
+import com.quanticheart.gallery.view.home.constants.FolderConstants
+import com.quanticheart.gallery.imageExtentions.model.FolderData
+import com.quanticheart.gallery.imageExtentions.getAllImagesByFolder
+import kotlinx.android.synthetic.main.activity_images_simple.*
 import permissions.dispatcher.*
 
 @RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
+class ImageListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
+        setContentView(R.layout.activity_images_simple)
+        showImagesWithPermissionCheck()
     }
 
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
-        }
+    fun showImages() {
+        getSerializableExtra<FolderData>(FolderConstants.FolderDataKey)?.let { data ->
+            val list = getAllImagesByFolder(data.path)
+            imageRecycler.setImagesAdapter().addData(list)
+        } ?: finish()
     }
 
     @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun showRationaleForCamera() {
-        openGallery()
+        finish()
     }
 
     @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onCameraDenied() {
-        flipper.displayedChild = 1
+        finish()
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)

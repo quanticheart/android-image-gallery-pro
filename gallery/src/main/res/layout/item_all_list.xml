@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~  *                                     /@
   ~  *                      __        __   /\/
@@ -31,17 +31,24 @@
   ~  *        |/_/         \===/
   ~  *                       =
   ~  *
-  ~  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:39:14 for quantic heart studios
+  ~  * Copyright(c) Developed by John Alves at 2020/2/22 at 0:3:39 for quantic heart studios
   ~  */
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.quanticheart.gallery" >
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:orientation="vertical">
 
-    <application>
-        <activity android:name=".GalleryActivity" />
-        <activity android:name="com.quanticheart.gallery.view.list.ImageListActivity" />
-        <activity android:name="com.quanticheart.gallery.view.indicator.ImageIndicatorActivity" />
-        <activity android:name=".view.allList.GalletyAllActivity" />
-    </application>
-</manifest>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

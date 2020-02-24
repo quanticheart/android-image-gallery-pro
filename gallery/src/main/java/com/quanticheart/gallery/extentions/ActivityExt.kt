@@ -35,6 +35,8 @@
  *
  */
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.quanticheart.gallery.extentions
 
 import android.app.Activity
@@ -42,7 +44,7 @@ import android.content.Context
 import androidx.appcompat.app.AlertDialog
 
 fun <T> Activity.getSerializableExtra(key: String): T? =
-    this.intent?.extras?.getSerializable(key) as T ?: null
+    this.intent?.extras?.getSerializable(key) as T
 
 fun Context.createSelectDialog(
     title: String,

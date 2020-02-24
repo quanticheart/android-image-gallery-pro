@@ -31,58 +31,33 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/24 at 0:14:52 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+package com.quanticheart.gallery.imageExtentions.model
 
-import android.Manifest
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
-import permissions.dispatcher.*
-
-@RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
-    }
-
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
-        }
-    }
-
-    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showRationaleForCamera() {
-        openGallery()
-    }
-
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraDenied() {
-        flipper.displayedChild = 1
-    }
-
-    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraNeverAskAgain() {
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
-    }
-}
+data class ImageFullData(
+    val id: Int = 0,
+    var title: String = "",
+    var path: String = "",
+    var bucket_display_name: String = "",
+    var bucket_id: String = "",
+    var data: String = "",
+    var date_added: String = "",
+    var date_modified: String = "",
+    var date_taken: String = "",
+    var display_name: String = "",
+    var height: String = "",
+    var mime_type: String = "",
+    var orientation: String = "",
+    var size: String = "",
+    var title_img: String = "",
+    var width: String = "",
+    var latitude: String = "",
+    var longitude: String = "",
+    var description: String = "",
+    var is_private: String = "",
+    var mini_thumb_magic: String = "",
+    var picasa_id: String = ""
+)

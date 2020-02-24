@@ -31,58 +31,60 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 10:51:6 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+@file:Suppress("DEPRECATION")
 
-import android.Manifest
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
-import permissions.dispatcher.*
+package com.quanticheart.gallery.imageExtentions
 
-@RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
+import android.app.Activity
+import android.net.Uri
+import android.provider.MediaStore
+import com.quanticheart.gallery.imageExtentions.extentions.getStringOrEmpty
+import com.quanticheart.gallery.imageExtentions.model.ImageData
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
-    }
+fun Activity.getAllImagesByFolder(path: String): ArrayList<ImageData> {
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
+    val images: ArrayList<ImageData> = ArrayList()
+
+    val allImagesUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
+    val projection = getDatabaseKeys()
+
+    val cursor = contentResolver.query(
+        allImagesUri,
+        projection,
+        MediaStore.Images.Media.DATA + " like ? ",
+        arrayOf("%$path%"),
+        null
+    )
+
+    cursor?.let {
+        try {
+            while (cursor.moveToNext()) {
+                images.add(
+                    ImageData(
+                        cursor.getStringOrEmpty(projection[1]),
+                        cursor.getStringOrEmpty(projection[0]),
+                        cursor.getStringOrEmpty(projection[2])
+                    )
+                )
+            }
+            images.reverse()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
+    cursor?.close()
+    return images
+}
 
-    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showRationaleForCamera() {
-        openGallery()
-    }
-
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraDenied() {
-        flipper.displayedChild = 1
-    }
-
-    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraNeverAskAgain() {
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
-    }
+private fun getDatabaseKeys(): Array<String> {
+    return arrayOf(
+        MediaStore.Images.ImageColumns.DATA,
+        MediaStore.Images.Media.DISPLAY_NAME,
+        MediaStore.Images.Media.SIZE
+    )
 }

@@ -31,58 +31,25 @@
  *  *        |/_/         \===/
  *  *                       =
  *  *
- *  * Copyright(c) Developed by John Alves at 2020/2/22 at 11:46:18 for quantic heart studios
+ *  * Copyright(c) Developed by John Alves at 2020/2/23 at 10:48:42 for quantic heart studios
  *
  */
 
-package com.quanticheart.gallery
+package com.quanticheart.gallery.extentions
 
-import android.Manifest
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.quanticheart.gallery.extentions.setFolderAdapter
-import com.quanticheart.gallery.imageExtentions.getAllImagesFolders
-import kotlinx.android.synthetic.main.activity_gallery.*
-import permissions.dispatcher.*
+import com.quanticheart.gallery.customView.GridRecyclerView
+import com.quanticheart.gallery.view.allList.adapter.AllListAdapter
+import com.quanticheart.gallery.view.home.adapter.PictureFolderAdapter
+import com.quanticheart.gallery.view.list.adapter.PictureAdapter
 
-@RuntimePermissions
-class GalleryActivity : AppCompatActivity() {
+fun GridRecyclerView.setFolderAdapter(): PictureFolderAdapter {
+    return PictureFolderAdapter(this)
+}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
-        openGalleryWithPermissionCheck()
-    }
+fun GridRecyclerView.setImagesAdapter(): PictureAdapter {
+    return PictureAdapter(this)
+}
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
-        val folds = getAllImagesFolders()
-        if (folds.isNotEmpty()) {
-            folderRecycler.setFolderAdapter().addData(folds)
-            flipper.displayedChild = 0
-        }
-    }
-
-    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showRationaleForCamera() {
-        openGallery()
-    }
-
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraDenied() {
-        flipper.displayedChild = 1
-    }
-
-    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onCameraNeverAskAgain() {
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
-    }
+fun GridRecyclerView.setAllImagesAdapter(): AllListAdapter {
+    return AllListAdapter(this)
 }

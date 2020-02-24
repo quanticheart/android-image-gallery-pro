@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.quanticheart.gallery.GalleryActivity
+import com.quanticheart.gallery.view.allList.GalletyAllActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import permissions.dispatcher.*
 
@@ -15,29 +16,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btn.setOnClickListener {
-            openGalleryWithPermissionCheck()
+        btn1.setOnClickListener {
+            openGalleryFolderWithPermissionCheck()
+        }
+
+        btn2.setOnClickListener {
+            openGalleryAllWithPermissionCheck()
         }
     }
 
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun openGallery() {
+    fun openGalleryFolder() {
         startActivity(Intent(this, GalleryActivity::class.java))
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    fun openGalleryAll() {
+        startActivity(Intent(this, GalletyAllActivity::class.java))
     }
 
     @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun showRationaleForCamera() {
-        openGallery()
     }
 
     @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onCameraDenied() {
-        openGallery()
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onCameraNeverAskAgain() {
-        openGallery()
     }
 
     override fun onRequestPermissionsResult(
