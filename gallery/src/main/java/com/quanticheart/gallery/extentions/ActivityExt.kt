@@ -38,5 +38,30 @@
 package com.quanticheart.gallery.extentions
 
 import android.app.Activity
+import android.content.Context
+import androidx.appcompat.app.AlertDialog
 
-fun <T> Activity.getSerializableExtra(key:String): T? = this.intent?.extras?.getSerializable(key) as T ?: null
+fun <T> Activity.getSerializableExtra(key: String): T? =
+    this.intent?.extras?.getSerializable(key) as T ?: null
+
+fun Context.createSelectDialog(
+    title: String,
+    description: String,
+    option1Title: String,
+    callbackOption1: () -> Unit,
+    option2Title: String,
+    callbackOption2: () -> Unit
+) {
+    val alertDialogBuilder = AlertDialog.Builder(this)
+    alertDialogBuilder.setTitle(title)
+    alertDialogBuilder.setMessage(description)
+    alertDialogBuilder.setPositiveButton(option1Title) { dialog, _ ->
+        dialog.dismiss()
+        callbackOption1()
+    }
+    alertDialogBuilder.setNegativeButton(option2Title) { dialog, _ ->
+        dialog.dismiss()
+        callbackOption2()
+    }
+    alertDialogBuilder.create().show()
+}

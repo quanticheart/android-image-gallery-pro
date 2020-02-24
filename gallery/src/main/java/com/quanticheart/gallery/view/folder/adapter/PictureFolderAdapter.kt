@@ -37,7 +37,6 @@
 package com.quanticheart.gallery.view.folder.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +45,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.quanticheart.gallery.R
+import com.quanticheart.gallery.extentions.createSelectDialog
 import com.quanticheart.gallery.view.folder.adapter.PictureFolderAdapter.FolderHolder
 import com.quanticheart.gallery.view.folder.constants.FolderConstants
 import com.quanticheart.gallery.view.folder.model.ImageFolderData
@@ -65,7 +65,6 @@ class PictureFolderAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<Fo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderHolder =
         FolderHolder(
-            parent.context,
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_picture_folder,
                 parent,
@@ -80,21 +79,34 @@ class PictureFolderAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<Fo
 
     override fun getItemCount(): Int = database.size
 
-    inner class FolderHolder(private val context: Context, itemView: View) :
+    inner class FolderHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
 
         @SuppressLint("SetTextI18n")
         fun bind(folder: ImageFolderData) {
-            Glide.with(context)
+            Glide.with(itemView.context)
                 .load(folder.firstPic)
                 .apply(RequestOptions().centerCrop())
                 .into(itemView.folderPic)
 
             itemView.folderName.text = "(${folder.numberOfPics}) ${folder.folderName}"
             itemView.folderPic.setOnClickListener {
-                val move = Intent(context, ImageIndicatorActivity::class.java)
-                move.putExtra(FolderConstants.FolderDataKey, folder)
-                context.startActivity(move)
+                itemView.context.createSelectDialog(
+                    "Select type view",
+                    "Two views avaliable",
+                    "simple",
+                    {
+                        val move = Intent(itemView.context, ImageListActivity::class.java)
+                        move.putExtra(FolderConstants.FolderDataKey, folder)
+                        itemView.context.startActivity(move)
+                    },
+                    "indicator",
+                    {
+                        val move = Intent(itemView.context, ImageIndicatorActivity::class.java)
+                        move.putExtra(FolderConstants.FolderDataKey, folder)
+                        itemView.context.startActivity(move)
+                    }
+                )
             }
         }
     }
